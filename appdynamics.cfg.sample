@@ -1,0 +1,11 @@
+[agent]
+app = your-app
+tier = flask
+node = flask-1
+
+[controller]
+host = your-account.saas.appdynamics.com
+port = 443
+ssl = on
+account = your-accont
+accesskey = your-access-key

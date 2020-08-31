@@ -1,4 +1,4 @@
-Python Demo App
+AppDynamics Python Demo App
 ===============
 
 A trivial Flask web app that can be used to demo performance monitoring features. The app has routes that do things like:
@@ -13,7 +13,9 @@ NOTE: To use the AppDynamics Python Agent, you must have a compatible (4.0+) App
 
 ## Installation
 
-Python 2.6 or 2.7 are required. MacOS X and recent Linux distributions should have these preinstalled. Older Linux distributions (like CentOS 5) may come with a version of Python is too old, but you should be able to easily find packages for Python 2.7.
+Python 2.6/2.7/3.4/3.5/3.6/3.7 are required. macOS and recent Linux distributions should have these preinstalled.
+
+https://docs.appdynamics.com/display/PRO45/Python+Supported+Environments
 
 You must have `pip` and `virtualenv` installed. These may already be installed for you. If not, install `pip` with:
 
@@ -30,62 +32,45 @@ sudo pip install virtualenv
 Create a virtualenv:
 
 ```
-virtualenv env
-env/bin/pip install -r requirements.txt
+virtualenv python3
+python3/bin/pip3 install -r requirements.txt
 ```
 
-Install and configure MySQL and/or PostgreSQL. They both are configured in `demo/config.py` to be running on localhost with the default port, a user named `test`, with password `test`, and a database named `test`. There do not need to be any tables or anything in the `test` database.
+Install and configure MySQL/MariaDB, configured in `demo/config.py` to be running on localhost with the default port, a user named `test`, with password `test`, and a database named `test`. 
+There do not need to be any tables or anything in the `test` database.
 
 The web server runs on port 9000.
 
 To run the development server:
 
 ```
-env/bin/python demo/app.py
+python3/bin/python demo/app.py
 ```
 
 To run in production:
 
 ```
-env/bin/gunicorn -w 4 -b 0.0.0.0:9000 demo.app:app
+python3/bin/gunicorn -w 2 -b 0.0.0.0:9000 demo.app:app
 ```
 
 ## Running with the agent
 
-If your version of pip is older than 1.5, upgrade pip with:
-
-```
-pip install -U pip
-```
-
 Then install the agent into your virtualenv:
 
 ```
-env/bin/pip install --pre appdynamics
+python3/bin/pip3 install --pre appdynamics
 ```
 
 Run the agent with the `pyagent` command and a configuration file (there's a sample configuration file included in this repository, `appdynamics.cfg`):
 
 ```
-env/bin/pyagent run -c appdynamics.cfg - env/bin/gunicorn -w 4 -b 0.0.0.0:9000 demo.app:app
+python3/bin/pyagent run -c appdynamics.cfg - env/bin/gunicorn -w 4 -b 0.0.0.0:9000 demo.app:app
 ```
 
 ## Generating load
 
-Install siege through your package manager (`yum install siege` on Red Hat, `apt-get install siege` on Debian, or `brew install siege` on Mac). Edit the siege.txt (or copy it and edit the copy) and edit the variables defined at the top to specify the exit calls you wish to make, then run:
-
 ```
-siege -d 1 -f siege.txt
-```
-
-## Run with Docker
-
-In Docker directory, add configuration value to CONTR_HOST, ACCOUNT_NAME, ACCESS_KEY, APP_NAME, TIER_NAME, NODE_NAME in startPython.sh.
-
-Run docker with
-
-```
-./startPython.sh
+sh -x load.sh
 ```
 
 ## HTTP Exit Call / Distributed Correlation Testing
